@@ -1,0 +1,33 @@
+#!/bin/bash
+
+money=1000
+
+while true; do
+    echo "現在の所持金: ${money}"
+
+# 所持金が0以下なら終了
+    if [[ $money -le 0 ]]; then
+        echo "所持金が尽きました…ゲーム終了！"
+        break
+    fi
+
+    read -p "Enterでサイコロを振る（qで終了）: " input
+    [[ "$input" == "q" ]] && break
+
+    dice1=$((RANDOM % 6 + 1))
+    dice2=$((RANDOM % 6 + 1))
+    dice3=$((RANDOM % 6 + 1))
+    echo "出目: $dice1, $dice2, $dice3"
+
+    if [[ $dice1 -eq $dice2 && $dice2 -eq $dice3 ]]; then
+        echo "ゾロ目！勝ち！"
+        money=$((money + 500))
+    elif [[ $dice1 -eq $dice2 || $dice1 -eq $dice3 || $dice2 -eq $dice3 ]]; then
+        echo "役あり！"
+        money=$((money + 100))
+    else
+        echo "役なし…負け！"
+        money=$((money - 100))
+    fi
+done
+echo "現在の所持金: ${money}"
